@@ -33,7 +33,7 @@ Trivy (tri pronounced like trigger, vy pronounced like envy) is a simple and com
 3. `Catlin` binary has many subcommands as it's taken from `github.com/tektoncd/plumbing` in order to use the existing code and avoid re-writing but here I am going to focus on vulnerability scanning.
    So to try that out use the following sub-command:
 
-```
+```bash
 $ ./catlin scan pkg/cmd/validate/testdata/task/black/0.1/black.yaml
 FILE: pkg/cmd/validate/testdata/task/black/0.1/black.yaml
 docker.io/cytopia/black:latest-0.2@sha256:2ec766f1c7e42e6b59c0873ce066fa0a2aa2bf8a80dbc1c40f1566bb539303e0
