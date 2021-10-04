@@ -55,19 +55,34 @@ func (t *taskValidator) Validate() Result {
 		result.Append(validateStep(step))
 
 	}
-	for _, step := range task.Spec.Steps {
-		fmt.Println(step.Image)
-		scanner(step)
-	}
 	return result
 }
 
-func Scanner(res interface{}) {
+func getParamDefault(imgParam string, params []v1beta1.ParamSpec) string {
+	for _, param := range params {
+		if strings.Contains(imgParam, fmt.Sprintf("params.%s", param.Name)) && param.Default != nil {
+			return param.Default.StringVal
+		}
+	}
+	return ""
+}
 
+func Scanner(res interface{}) {
 	task := res.(*v1beta1.Task)
 	for _, step := range task.Spec.Steps {
-		fmt.Println(step.Image)
-		scanner(step)
+		img := step.Image
+		if _, usesVars := extractExpressionFromString(img, ""); usesVars {
+			// paramName := img[strings.LastIndex(img, ".")+1 : strings.LastIndex(img, ")")]
+			img = getParamDefault(img, task.Spec.Params)
+			if img == "" {
+				fmt.Println("No image found")
+				continue
+			}
+		} else {
+			img = step.Image
+		}
+		fmt.Println("Scanning image -> ", img)
+		scanner(img)
 	}
 }
 

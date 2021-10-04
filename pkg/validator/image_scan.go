@@ -22,7 +22,6 @@ import (
 	dockerScan "github.com/aquasecurity/trivy/pkg/scanner"
 	"github.com/aquasecurity/trivy/pkg/types"
 	"github.com/aquasecurity/trivy/pkg/vulnerability"
-	"github.com/tektoncd/pipeline/pkg/apis/pipeline/v1beta1"
 	"golang.org/x/xerrors"
 )
 
@@ -32,12 +31,12 @@ func initializeResultClient() vulnerability.Client {
 	return vulnerabilityClient
 }
 
-func scanner(s v1beta1.Step) error {
+func scanner(img string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10000)
 	defer cancel()
 
 	artifactOptions := option.ArtifactOption{
-		Target:  s.Image,
+		Target:  img,
 		Timeout: time.Second * 5000,
 	}
 
@@ -78,7 +77,7 @@ func scanner(s v1beta1.Step) error {
 			return fmt.Errorf("could not write results: %v", fmt.Errorf("unable to write results: %w", err))
 		}
 	} else {
-		fmt.Printf("no vulnerabilities found for image %s", s.Image)
+		fmt.Printf("no vulnerabilities found for image %s", img)
 	}
 	return nil
 }

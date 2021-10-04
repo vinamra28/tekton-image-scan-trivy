@@ -24,6 +24,8 @@ Trivy (tri pronounced like trigger, vy pronounced like envy) is a simple and com
    2021-02-07T14:13:59.275+0300    INFO    Listening localhost:4954...
    ```
 
+After the server starts running it automatically updates it's DB every 12 hours. [Issue](https://github.com/aquasecurity/trivy/issues/692) mentioning this.
+
 2. Now build the binary using the following command:
 
    ```
